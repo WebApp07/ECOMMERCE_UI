@@ -4,15 +4,36 @@ import { ProductType } from "@/types";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function ProductCard({ product }: { product: ProductType }) {
+  const [productTypes, setProductTypes] = useState({
+    size: product.sizes[0],
+    color: product.colors[0],
+  });
+
+  //console.log(productTypes);
+
+  const handleProductType = ({
+    type,
+    value,
+  }: {
+    type: "size" | "color";
+    value: string;
+  }) => {
+    setProductTypes((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
+
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
       {/* IMAGE */}
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-[2/3]">
           <Image
-            src={product.images[product.colors[0]]}
+            src={product.images[productTypes.color]}
             alt={product.name}
             fill
             className="object-cover hover:scale-105 transition-all duration-300"
@@ -32,6 +53,9 @@ export default function ProductCard({ product }: { product: ProductType }) {
               name="size"
               id="size"
               className="ring ring-gray-300 rounded-md px-2 py-1"
+              onChange={(e) => {
+                handleProductType({ type: "size", value: e.target.value });
+              }}
             >
               {product.sizes.map((size) => (
                 <option key={size} value={size}>
@@ -45,7 +69,17 @@ export default function ProductCard({ product }: { product: ProductType }) {
             <span className="text-gray-500">Color</span>
             <div className="flex items-center gap-2">
               {product.colors.map((color) => (
-                <div className="" key={color}>
+                <div
+                  className={`cursor-pointer border-1 ${
+                    productTypes.color === color
+                      ? "border-gray-400"
+                      : "border=gray-200"
+                  } rounded-full p-[1.2px]`}
+                  key={color}
+                  onClick={() =>
+                    handleProductType({ type: "color", value: color })
+                  }
+                >
                   <div
                     className="w-[14px] h-[14px] rounded-full"
                     style={{ backgroundColor: color }}
