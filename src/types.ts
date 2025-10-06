@@ -30,7 +30,7 @@ export const shippingFormSchema = z.object({
     .min(7, "Phone number must be at least 7 digits!")
     .max(10, "Phone number must be at most 10 digits!"),
   address: z.string().min(1, "Address is required!"),
-  City: z.string().min(1, "City is required!"),
+  city: z.string().min(1, "City is required!"),
 });
 
 export type ShippingFormInputs = z.infer<typeof shippingFormSchema>;
