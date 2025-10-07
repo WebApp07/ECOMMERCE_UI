@@ -39,7 +39,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
       selectedColor: productTypes.color,
     });
 
-    toast.success("Product added to cart.");
+    toast.success(`${product.name} Added to cart.`);
   };
 
   return (
