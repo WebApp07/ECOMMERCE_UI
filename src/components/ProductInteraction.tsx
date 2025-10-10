@@ -1,9 +1,11 @@
 "use client";
 
+import useCartStore from "@/store/cartStore";
 import { ProductType } from "@/types";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, PlusIcon, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ProductInteraction = ({
   product,
@@ -18,6 +20,8 @@ const ProductInteraction = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [quantity, setQuantity] = useState(1);
+
+  const { addToCart } = useCartStore();
 
   console.log(`this is searchParams ${searchParams}`);
 
@@ -39,6 +43,16 @@ const ProductInteraction = ({
         setQuantity((prev) => prev - 1);
       }
     }
+  };
+
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      quantity,
+      selectedColor,
+      selectedSize,
+    });
+    toast.success(`${product.name} has been added to your cart.`);
   };
 
   return (
@@ -106,6 +120,18 @@ const ProductInteraction = ({
           </button>
         </div>
       </div>
+      {/*BUTTONS */}
+      <button
+        onClick={handleAddToCart}
+        className="bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg flex item-center justify-center gap-2 cursor-pointer text-sm font-medium"
+      >
+        <PlusIcon className="w-4 h-4" />
+        Add to Cart
+      </button>
+      <button className="ring-1 ring-gray-400 shadow-lg text-gray-800 px-4 py-2 rounded-md flex items-center justify-center gap-2 cursor-pointer text-sm font-medium">
+        <ShoppingCart className="w-4 h-4" />
+        Buy this Item
+      </button>
     </>
   );
 };
